@@ -1,0 +1,379 @@
+import numpy as np
+
+# ============================================================
+# THEORY:
+# Perceptron is the simplest type of Artificial Neural Network.
+# It is a single-layer neural network used for binary classification.
+# In this experiment, it is used to classify numbers as EVEN or ODD.
+#
+# Input: ASCII values of digits 0 to 9 converted into 7-bit binary.
+# Output:
+#   1 -> EVEN
+#   0 -> ODD
+# ============================================================
+
+
+# ------------------------------------------------------------
+# Step Activation Function
+# This function decides final output of perceptron.
+# If weighted sum >= 0, output is 1
+# Else output is 0
+# ------------------------------------------------------------
+def step_function(x):
+    return 1 if x >= 0 else 0
+
+
+# ------------------------------------------------------------
+# Training Data Preparation
+# ASCII values:
+# '0' = 48
+# '1' = 49
+# ...
+# '9' = 57
+#
+# Convert each ASCII value into 7-bit binary
+# Example:
+# 6 → ASCII 54 → Binary 0110110
+# ------------------------------------------------------------
+training_data = []
+
+for i in range(10):
+    char = chr(48 + i)  # Generate digit character from ASCII
+    ascii_value = ord(char)  # Get ASCII value
+
+    # Convert ASCII to 7-bit binary list
+    binary_input = [int(bit) for bit in '{:07b}'.format(ascii_value)]
+
+    # Label assignment:
+    # EVEN = 1
+    # ODD = 0
+    label = 1 if i % 2 == 0 else 0
+
+    # Store input and corresponding output
+    training_data.append({
+        'input': binary_input,
+        'label': label
+    })
+
+
+# ------------------------------------------------------------
+# Initialize weights
+# Since input has 7 bits, 7 weights are required
+# Initially all weights are zero
+# ------------------------------------------------------------
+weights = np.zeros(7)
+
+
+# ------------------------------------------------------------
+# Training Phase
+# Perceptron learns using weight update rule:
+#
+# New Weight = Old Weight + (Input × Error)
+#
+# Error = Actual Output - Predicted Output
+# ------------------------------------------------------------
+for data in training_data:
+    input_vector = np.array(data['input'])
+    label = data['label']
+
+    # Calculate weighted sum
+    net_input = np.dot(input_vector, weights)
+
+    # Apply activation function
+    output = step_function(net_input)
+
+    # Calculate error
+    error = label - output
+
+    # Update weights
+    weights += input_vector * error
+
+
+# ------------------------------------------------------------
+# Testing Phase
+# User enters any digit from 0 to 9
+# ------------------------------------------------------------
+user_char = input("Enter a digit between 0 and 9: ")
+
+# Input validation
+if user_char not in "0123456789":
+    print("Invalid input! Please enter a digit between 0 and 9.")
+
+else:
+    # Convert user input to ASCII
+    ascii_input = ord(user_char)
+
+    # Convert ASCII to binary
+    binary_input = np.array(
+        [int(bit) for bit in '{:07b}'.format(ascii_input)]
+    )
+
+    # Calculate prediction
+    prediction = step_function(np.dot(binary_input, weights))
+
+    # Display result
+    if prediction == 1:
+        print(user_char, "(ASCII:", ascii_input, ") is EVEN")
+    else:
+        print(user_char, "(ASCII:", ascii_input, ") is ODD")
+
+
+# ------------------------------------------------------------
+# CONCLUSION:
+# Perceptron neural network successfully classifies
+# digits into EVEN and ODD using ASCII binary representation.
+# ------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OR 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+
+# ============================================================
+# THEORY
+# ============================================================
+# Perceptron is the simplest form of Artificial Neural Network
+# used for binary classification problems.
+#
+# It consists of a single neuron and works using:
+# 1. Weighted inputs
+# 2. Summation
+# 3. Activation function
+#
+# The perceptron receives input values, multiplies them by weights,
+# calculates the weighted sum, and passes the result through an
+# activation function to generate output.
+#
+# In this experiment, ASCII values of digits from 0 to 9 are used.
+# Each ASCII value is converted into 7-bit binary format.
+#
+# Example:
+# Digit = 6
+# ASCII = 54
+# Binary = 0110110
+#
+# These binary bits become the input vector to the perceptron.
+#
+# Step Activation Function:
+# Output = 1 if weighted sum >= 0
+# Output = 0 if weighted sum < 0
+#
+# Classification:
+# 1 = EVEN
+# 0 = ODD
+#
+# Weight Update Rule:
+# W(new) = W(old) + Input × Error
+#
+# Error = Actual Output - Predicted Output
+#
+# Thus, the network learns to distinguish between even and odd digits.
+# ============================================================
+
+
+# Step Activation Function
+def step_function(x):
+    return 1 if x >= 0 else 0
+
+
+# Training data preparation
+training_data = []
+
+# ASCII digits:
+# '0' = 48
+# '1' = 49
+# ...
+# '9' = 57
+
+for i in range(10):
+    char = chr(48 + i)                  # Convert number to character
+    ascii_value = ord(char)             # Get ASCII value
+    binary_input = [int(bit) for bit in '{:07b}'.format(ascii_value)]  # 7-bit binary
+
+    # EVEN = 1, ODD = 0
+    label = 1 if i % 2 == 0 else 0
+
+    training_data.append({
+        'input': binary_input,
+        'label': label
+    })
+
+
+# Initialize weights with zero
+weights = np.zeros(7)
+
+
+# Training phase
+for data in training_data:
+    input_vector = np.array(data['input'])
+    label = data['label']
+
+    # Weighted sum calculation
+    net_input = np.dot(input_vector, weights)
+
+    # Apply activation function
+    output = step_function(net_input)
+
+    # Calculate error
+    error = label - output
+
+    # Update weights
+    weights += input_vector * error
+
+
+# Testing phase
+user_char = input("Enter a digit between 0 and 9: ")
+
+if user_char not in "0123456789":
+    print("Invalid input! Enter digit between 0 and 9.")
+
+else:
+    ascii_input = ord(user_char)
+    binary_input = np.array([int(bit) for bit in '{:07b}'.format(ascii_input)])
+
+    prediction = step_function(np.dot(binary_input, weights))
+
+    result = "EVEN" if prediction == 1 else "ODD"
+
+    print(user_char, "(ASCII:", ascii_input, ") is", result)
+
+
+# ============================================================
+# CONCLUSION
+# ============================================================
+# Thus, Perceptron Neural Network successfully classifies
+# digits into EVEN and ODD using ASCII binary representation.
+# ============================================================
+
+
+# ============================================================
+# VIVA QUESTIONS WITH ANSWERS
+# ============================================================
+
+# Q1. What is Perceptron Neural Network?
+# Perceptron is a single-layer artificial neural network used for binary classification.
+
+# Q2. Why is perceptron called single-layer network?
+# Because it contains only one computational layer and no hidden layer.
+
+# Q3. What is activation function?
+# Activation function decides whether neuron should produce output.
+
+# Q4. Which activation function is used here?
+# Step activation function.
+
+# Q5. What is ASCII?
+# ASCII stands for American Standard Code for Information Interchange.
+
+# Q6. ASCII value of digit 0?
+# 48
+
+# Q7. ASCII value of digit 9?
+# 57
+
+# Q8. Why convert ASCII into binary?
+# Because neural networks require numerical binary input.
+
+# Q9. What is weight in perceptron?
+# Weight determines importance of each input.
+
+# Q10. What is error?
+# Difference between actual and predicted output.
+# Error = Actual Output - Predicted Output
+
+# Q11. Weight update formula?
+# W = W + Input × Error
+
+# Q12. What type of learning is used?
+# Supervised learning.
+
+# Q13. Why supervised learning?
+# Because correct labels are already known.
+
+# Q14. Why EVEN = 1 and ODD = 0?
+# For binary classification representation.
+
+# Q15. Limitation of perceptron?
+# It can solve only linearly separable problems.
+
+
+# ============================================================
+# SCRIPT TO EXPLAIN TO EXTERNAL EXAMINER
+# ============================================================
+
+# Good morning sir/ma’am.
+# My experiment is Perceptron Neural Network for recognizing even and odd numbers.
+
+# Perceptron is the simplest artificial neural network used for
+# binary classification problems.
+
+# Here, digits from 0 to 9 are taken in ASCII format.
+
+# ASCII values range from 48 to 57.
+
+# Each ASCII value is converted into 7-bit binary representation
+# because neural networks accept numerical input.
+
+# Example:
+# Digit 6 has ASCII 54 and binary 0110110.
+
+# The perceptron receives these 7 binary inputs.
+
+# Initially all weights are zero.
+
+# Weighted sum is calculated using dot product.
+
+# Formula:
+# Net = Input × Weight
+
+# Then step activation function is applied.
+
+# Rule:
+# If output >= 0 → EVEN
+# Else → ODD
+
+# Error is calculated as:
+# Error = Actual Output - Predicted Output
+
+# Weights are updated using perceptron learning rule:
+# W = W + Input × Error
+
+# After training, user enters a digit and system predicts EVEN or ODD.
+
+# Example:
+# Input 6 gives EVEN.
+
+# Thus perceptron successfully classifies even and odd numbers.
+# ============================================================

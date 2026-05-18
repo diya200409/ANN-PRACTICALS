@@ -1,0 +1,330 @@
+import tensorflow as tf
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_breast_cancer
+
+data = load_breast_cancer()
+X = data.data
+y = data.target
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Input(shape=(X_train.shape[1],)),
+    tf.keras.layers.Dense(1, activation='sigmoid')
+])
+
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+
+model.fit(X_train, y_train, epochs=5)
+
+loss, accuracy = model.evaluate(X_test, y_test)
+
+print("Accuracy:", accuracy)
+
+
+
+
+
+
+
+
+
+"""
+===========================================================
+EXPERIMENT 4.9
+Aim:
+How to Train a Neural Network with TensorFlow and evaluation
+of Logistic Regression using TensorFlow
+===========================================================
+"""
+
+# =========================================================
+# THEORY
+# =========================================================
+"""
+TensorFlow:
+TensorFlow is an open-source machine learning framework developed by Google.
+It is used for building and training neural networks.
+
+PyTorch:
+PyTorch is another deep learning framework used for machine learning
+and AI applications.
+
+Regression:
+Regression is a machine learning technique used to predict continuous values.
+
+Neural Network:
+A neural network is a computational model inspired by the human brain.
+It contains neurons, weights, activation functions, and layers.
+
+Logistic Regression:
+Logistic regression is a classification algorithm used for binary outputs.
+It predicts probabilities between 0 and 1.
+
+Sigmoid Function:
+Sigmoid converts values into probability between 0 and 1.
+
+Formula:
+σ(x) = 1 / (1 + e^(-x))
+"""
+
+# =========================================================
+# ALGORITHM
+# =========================================================
+"""
+Step 1: Import required libraries
+Step 2: Load dataset
+Step 3: Split data into training and testing
+Step 4: Scale input features
+Step 5: Build neural network model
+Step 6: Compile the model
+Step 7: Train the model for multiple epochs
+Step 8: Evaluate the model
+Step 9: Display accuracy
+"""
+
+# =========================================================
+# IMPORT LIBRARIES
+# =========================================================
+
+# TensorFlow library
+import tensorflow as tf
+
+# Split dataset
+from sklearn.model_selection import train_test_split
+
+# Feature scaling
+from sklearn.preprocessing import StandardScaler
+
+# Dataset
+from sklearn.datasets import load_breast_cancer
+
+# =========================================================
+# LOAD DATASET
+# =========================================================
+
+# Load breast cancer dataset
+data = load_breast_cancer()
+
+# Input features
+X = data.data
+
+# Target values
+y = data.target
+
+# =========================================================
+# SPLIT DATA
+# =========================================================
+
+# Split dataset into training and testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+# =========================================================
+# SCALE FEATURES
+# =========================================================
+
+# Create scaler object
+scaler = StandardScaler()
+
+# Scale training data
+X_train = scaler.fit_transform(X_train)
+
+# Scale testing data
+X_test = scaler.transform(X_test)
+
+# =========================================================
+# BUILD MODEL
+# =========================================================
+
+# Create neural network
+model = tf.keras.Sequential([
+
+    # Input layer
+    tf.keras.layers.Input(shape=(X_train.shape[1],)),
+
+    # Logistic regression output layer
+    tf.keras.layers.Dense(
+        1,
+        activation='sigmoid'
+    )
+])
+
+# =========================================================
+# COMPILE MODEL
+# =========================================================
+
+# Configure training settings
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+
+# =========================================================
+# TRAIN MODEL
+# =========================================================
+
+# Train model with epochs
+model.fit(
+    X_train,
+    y_train,
+    epochs=5
+)
+
+# =========================================================
+# EVALUATE MODEL
+# =========================================================
+
+# Evaluate performance
+loss, accuracy = model.evaluate(
+    X_test,
+    y_test
+)
+
+# Print final accuracy
+print("Accuracy:", accuracy)
+
+# =========================================================
+# OUTPUT EXPLANATION
+# =========================================================
+"""
+Sample Output:
+
+Epoch 1/5
+accuracy: 0.72
+loss: 0.58
+
+Epoch 2/5
+accuracy: 0.78
+loss: 0.51
+
+Epoch 3/5
+accuracy: 0.82
+loss: 0.46
+
+Epoch 4/5
+accuracy: 0.86
+loss: 0.41
+
+Epoch 5/5
+accuracy: 0.88
+loss: 0.38
+
+Accuracy: 0.92
+
+Explanation:
+- Model trains for 5 epochs
+- Accuracy increases each epoch
+- Loss decreases each epoch
+- Final test accuracy is approximately 92%
+"""
+
+# =========================================================
+# CONCLUSION
+# =========================================================
+"""
+Conclusion:
+We successfully trained a neural network using TensorFlow.
+Logistic regression was implemented using sigmoid activation.
+The model achieved good accuracy in classification.
+"""
+
+# =========================================================
+# VIVA QUESTIONS WITH ANSWERS
+# =========================================================
+"""
+Q1. What is TensorFlow?
+Ans:
+TensorFlow is an open-source machine learning framework developed by Google.
+
+Q2. What is PyTorch?
+Ans:
+PyTorch is a deep learning framework developed by Facebook.
+
+Q3. What is neural network?
+Ans:
+A neural network is a brain-inspired computational model.
+
+Q4. What is logistic regression?
+Ans:
+It is a binary classification algorithm.
+
+Q5. Why sigmoid activation?
+Ans:
+Because sigmoid gives output between 0 and 1.
+
+Q6. What is epoch?
+Ans:
+One complete pass through the training data.
+
+Q7. What is optimizer?
+Ans:
+Optimizer updates weights to reduce loss.
+
+Q8. What is loss function?
+Ans:
+It measures prediction error.
+
+Q9. What is StandardScaler?
+Ans:
+It standardizes data for better model performance.
+
+Q10. Why split dataset?
+Ans:
+To train and test the model separately.
+"""
+
+# =========================================================
+# SCRIPT FOR EXTERNAL EXAMINER
+# =========================================================
+"""
+Good morning sir/madam,
+
+This experiment demonstrates training a neural network using TensorFlow.
+
+First, required libraries are imported.
+
+Then the breast cancer dataset is loaded.
+
+The dataset is split into training and testing sets.
+
+Feature scaling is applied using StandardScaler.
+
+Then a Sequential neural network model is created.
+
+The model contains:
+one input layer and one dense output neuron with sigmoid activation.
+
+This behaves like logistic regression.
+
+The model is compiled using:
+Adam optimizer,
+binary crossentropy loss,
+and accuracy metric.
+
+The model is trained for 5 epochs.
+
+During training, accuracy improves and loss decreases.
+
+Finally, testing accuracy is displayed.
+
+Thus the neural network is successfully trained and evaluated.
+
+Thank you.
+"""

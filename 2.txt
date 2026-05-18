@@ -1,0 +1,147 @@
+# ============================================================
+# EXPERIMENT 2: Generate ANDNOT Function using McCulloch-Pitts Neural Network
+# ============================================================
+
+# AIM:
+# Generate ANDNOT function using McCulloch-Pitts neural network.
+
+# OBJECTIVE:
+# To learn how to design McCulloch-Pitts neural models for logic functions like ANDNOT.
+
+# THEORY:
+# McCulloch-Pitts Neural Network:
+# McCulloch-Pitts neuron model was introduced by Warren McCulloch
+# and Walter Pitts in 1943.
+# It is the earliest artificial neuron model.
+# It takes binary inputs (0 or 1), applies weights, compares the result
+# with a threshold, and produces binary output (0 or 1).
+
+# Formula:
+# Yin = X1W1 + X2W2
+
+# Activation Rule:
+# If Yin >= Threshold, Output = 1
+# Else Output = 0
+
+# ANDNOT Logic:
+# Output = X1 AND NOT X2
+
+# Truth Table:
+# X1   X2   Output
+# 0    0      0
+# 1    0      1
+# 0    1      0
+# 1    1      0
+
+# Applications:
+# 1. Used to design logical operations
+# 2. Used to implement logic gates like AND, OR, NOT
+# 3. Basic understanding of artificial neurons
+
+# ============================================================
+# PROGRAM
+# ============================================================
+
+# Import NumPy library for array operations and dot product calculation
+import numpy as np
+
+# Define McCulloch-Pitts neuron function
+# This function takes inputs, weights, and threshold
+def mp_neuron(inputs, weights, threshold):
+
+    # Calculate weighted sum using dot product
+    # Formula: (X1*W1) + (X2*W2)
+    weighted_sum = np.dot(inputs, weights)
+
+    # Apply binary step activation function
+    # If weighted sum is greater than or equal to threshold, output = 1
+    # Otherwise output = 0
+    output = 1 if weighted_sum >= threshold else 0
+
+    # Return final neuron output
+    return output
+
+# Define ANDNOT logic function
+def and_not(x1, x2):
+
+    # Assign weights
+    # First input positive influence
+    # Second input negative influence
+    weights = [1, -1]
+
+    # Set threshold value
+    threshold = 1
+
+    # Store input values in NumPy array
+    inputs = np.array([x1, x2])
+
+    # Call McCulloch-Pitts neuron function
+    output = mp_neuron(inputs, weights, threshold)
+
+    # Return final output
+    return output
+
+# Test input combination 1
+# X1=0, X2=0
+# Calculation: (0×1)+(0×-1)=0
+# 0 < 1 → Output = 0
+print(and_not(0, 0))
+
+# Test input combination 2
+# X1=1, X2=0
+# Calculation: (1×1)+(0×-1)=1
+# 1 >= 1 → Output = 1
+print(and_not(1, 0))
+
+# Test input combination 3
+# X1=0, X2=1
+# Calculation: (0×1)+(1×-1)=-1
+# -1 < 1 → Output = 0
+print(and_not(0, 1))
+
+# Test input combination 4
+# X1=1, X2=1
+# Calculation: (1×1)+(1×-1)=0
+# 0 < 1 → Output = 0
+print(and_not(1, 1))
+
+# ============================================================
+# OUTPUT
+# ============================================================
+# 0
+# 1
+# 0
+# 0
+
+# ============================================================
+# CONCLUSION
+# ============================================================
+# Successfully implemented ANDNOT function using McCulloch-Pitts Neural Network.
+
+# ============================================================
+# VIVA QUESTIONS AND ANSWERS
+# ============================================================
+
+# Q1. What is McCulloch-Pitts neuron model?
+# It is the earliest artificial neuron model introduced in 1943.
+# It uses weighted inputs, threshold, and binary output.
+
+# Q2. What are the limitations of McCulloch-Pitts neuron model?
+# 1. Produces only binary output
+# 2. Cannot learn automatically
+# 3. Fixed weights and threshold
+# 4. Cannot solve complex nonlinear problems
+
+# Q3. What is threshold?
+# Threshold is the minimum value required to activate a neuron.
+
+# Q4. What is weighted sum?
+# Weighted sum is the multiplication of inputs and weights added together.
+# Formula: Yin = X1W1 + X2W2
+
+# Q5. Why is second weight negative in ANDNOT?
+# Negative weight creates NOT behavior for second input.
+
+# Q6. What is ANDNOT logic gate?
+# ANDNOT means X1 AND NOT X2.
+# Output becomes 1 only when X1=1 and X2=0.

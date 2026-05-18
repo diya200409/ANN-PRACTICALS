@@ -1,0 +1,439 @@
+import tensorflow as tf
+from tensorflow import keras
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load MNIST dataset
+(X_train, y_train), (X_test, y_test) = keras.datasets.mnist.load_data()
+
+# Normalize the data (scale pixel values to 0-1)
+X_train, X_test = X_train / 255.0, X_test / 255.0
+
+# Build a simple CNN model
+model = keras.Sequential([
+    keras.layers.Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)),
+    keras.layers.MaxPooling2D((2,2)),
+    keras.layers.Conv2D(64, (3,3), activation='relu'),
+    keras.layers.MaxPooling2D((2,2)),
+    keras.layers.Flatten(),
+    keras.layers.Dense(128, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')  # 10 classes (digits 0-9)
+])
+
+# Compile the model
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+# Train the model
+model.fit(X_train, y_train, epochs=5, validation_data=(X_test, y_test))
+
+# Evaluate the model
+test_loss, test_accuracy = model.evaluate(X_test, y_test)
+print('Test Accuracy:', test_accuracy)
+
+# Predict a random sample
+index = np.random.randint(0, len(X_test))
+plt.imshow(X_test[index], cmap='gray')
+plt.title(f"True Label: {y_test[index]}")
+plt.show()
+
+prediction = np.argmax(model.predict(X_test[index].reshape(1, 28, 28, 1)))
+print("Predicted Label:", prediction)
+
+
+
+
+# ===============================================================
+# EXPERIMENT NO. C-2
+# AIM:
+# Implementation of MNIST Handwritten Character Detection
+# using TensorFlow / Keras
+# ===============================================================
+
+# ===============================================================
+# OBJECTIVE:
+# To understand and implement handwritten digit recognition
+# using Convolutional Neural Network (CNN) on MNIST dataset.
+# ===============================================================
+
+# ===============================================================
+# THEORY:
+#
+# MNIST stands for Modified National Institute of Standards
+# and Technology database.
+#
+# It is a standard dataset used in Deep Learning and Computer Vision
+# for handwritten digit recognition.
+#
+# Dataset contains:
+# - 60,000 training images
+# - 10,000 testing images
+# - digits from 0 to 9
+# - grayscale images
+# - image size = 28 x 28 pixels
+#
+# TensorFlow:
+# TensorFlow is an open-source machine learning library developed
+# by Google used for building and training neural networks.
+#
+# Keras:
+# Keras is a high-level API of TensorFlow that makes neural network
+# implementation easier.
+#
+# CNN (Convolutional Neural Network):
+# CNN is a deep learning model specially designed for image data.
+#
+# CNN layers used:
+#
+# 1. Conv2D:
+#    Extracts image features like edges, patterns, shapes.
+#
+# 2. MaxPooling2D:
+#    Reduces image dimensions and computational complexity.
+#
+# 3. Flatten:
+#    Converts 2D matrix into 1D vector.
+#
+# 4. Dense Layer:
+#    Fully connected neural network layer.
+#
+# 5. Softmax:
+#    Gives probability for each output class.
+#
+# Working:
+# Input image → Feature Extraction → Pooling →
+# Flatten → Dense Layers → Classification
+#
+# This model predicts handwritten digits correctly with high accuracy.
+# ===============================================================
+
+# ===============================================================
+# ALGORITHM:
+#
+# Step 1:
+# Import required libraries.
+#
+# Step 2:
+# Load MNIST handwritten digit dataset.
+#
+# Step 3:
+# Normalize pixel values between 0 and 1.
+#
+# Step 4:
+# Build CNN model using Conv2D, Pooling, Flatten and Dense layers.
+#
+# Step 5:
+# Compile model using optimizer, loss function and accuracy metric.
+#
+# Step 6:
+# Train model using training dataset.
+#
+# Step 7:
+# Evaluate model using test dataset.
+#
+# Step 8:
+# Select random image from test dataset.
+#
+# Step 9:
+# Predict handwritten digit.
+#
+# Step 10:
+# Display original image with predicted label.
+# ===============================================================
+
+# ===============================================================
+# IMPORT LIBRARIES
+# ===============================================================
+
+import tensorflow as tf               # TensorFlow library
+from tensorflow import keras          # Keras API
+import matplotlib.pyplot as plt       # Plotting library
+import numpy as np                    # Numerical operations
+
+# ===============================================================
+# LOAD DATASET
+# ===============================================================
+
+# Load MNIST dataset
+# X_train = training images
+# y_train = training labels
+# X_test = testing images
+# y_test = testing labels
+
+(X_train, y_train), (X_test, y_test) = keras.datasets.mnist.load_data()
+
+# ===============================================================
+# NORMALIZATION
+# ===============================================================
+
+# Pixel values range from 0 to 255
+# Convert into 0 to 1 for better training performance
+
+X_train, X_test = X_train / 255.0, X_test / 255.0
+
+# ===============================================================
+# MODEL BUILDING
+# ===============================================================
+
+# Creating Sequential CNN model
+
+model = keras.Sequential([
+
+    # First Convolution Layer
+    # 32 filters
+    # kernel size = 3x3
+    # activation = ReLU
+    # input image shape = 28x28x1
+    keras.layers.Conv2D(
+        32,
+        (3,3),
+        activation='relu',
+        input_shape=(28,28,1)
+    ),
+
+    # Max Pooling Layer
+    # reduces dimensions
+    keras.layers.MaxPooling2D((2,2)),
+
+    # Second Convolution Layer
+    # 64 filters
+    keras.layers.Conv2D(
+        64,
+        (3,3),
+        activation='relu'
+    ),
+
+    # Second Pooling Layer
+    keras.layers.MaxPooling2D((2,2)),
+
+    # Flatten layer
+    keras.layers.Flatten(),
+
+    # Dense hidden layer
+    keras.layers.Dense(
+        128,
+        activation='relu'
+    ),
+
+    # Output layer
+    # 10 output neurons for digits 0 to 9
+    keras.layers.Dense(
+        10,
+        activation='softmax'
+    )
+])
+
+# ===============================================================
+# MODEL COMPILATION
+# ===============================================================
+
+# optimizer = adam
+# loss = sparse categorical crossentropy
+# metrics = accuracy
+
+model.compile(
+    optimizer='adam',
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# ===============================================================
+# MODEL TRAINING
+# ===============================================================
+
+# epochs = number of training cycles
+# validation_data = testing dataset for validation
+
+model.fit(
+    X_train,
+    y_train,
+    epochs=5,
+    validation_data=(X_test, y_test)
+)
+
+# ===============================================================
+# MODEL EVALUATION
+# ===============================================================
+
+test_loss, test_accuracy = model.evaluate(X_test, y_test)
+
+print('Test Accuracy:', test_accuracy)
+
+# ===============================================================
+# RANDOM SAMPLE TESTING
+# ===============================================================
+
+# Select random test image index
+index = np.random.randint(0, len(X_test))
+
+# Display handwritten digit image
+plt.imshow(X_test[index], cmap='gray')
+
+# Show true label
+plt.title(f"True Label: {y_test[index]}")
+
+plt.show()
+
+# ===============================================================
+# PREDICTION
+# ===============================================================
+
+prediction = np.argmax(
+    model.predict(
+        X_test[index].reshape(1, 28, 28, 1)
+    )
+)
+
+print("Predicted Label:", prediction)
+
+# ===============================================================
+# OUTPUT EXPLANATION:
+#
+# Example:
+#
+# Epoch 1/5
+# accuracy: 0.9609
+#
+# Meaning:
+# Model learned patterns from handwritten images.
+#
+# Test Accuracy: 0.9894
+#
+# Meaning:
+# Model correctly classified 98.94% test images.
+#
+# True Label: 4
+#
+# Meaning:
+# Actual digit in dataset is 4.
+#
+# Predicted Label: 4
+#
+# Meaning:
+# Model prediction is correct.
+# ===============================================================
+
+# ===============================================================
+# CONCLUSION:
+#
+# We successfully implemented handwritten digit recognition
+# using CNN with TensorFlow/Keras.
+#
+# The model achieved high accuracy (~99%) on MNIST dataset.
+#
+# CNN effectively extracts image features and performs classification.
+# ===============================================================
+
+# ===============================================================
+# VIVA QUESTIONS WITH ANSWERS
+# ===============================================================
+
+# Q1. What is MNIST?
+# Ans:
+# Modified National Institute of Standards and Technology dataset.
+
+# Q2. How many training images are present?
+# Ans:
+# 60,000
+
+# Q3. How many testing images are present?
+# Ans:
+# 10,000
+
+# Q4. What is image size?
+# Ans:
+# 28 x 28 pixels
+
+# Q5. Why normalization is used?
+# Ans:
+# To scale pixel values for faster and better training.
+
+# Q6. What is CNN?
+# Ans:
+# Convolutional Neural Network used for image processing.
+
+# Q7. What does Conv2D do?
+# Ans:
+# Extracts image features like edges and patterns.
+
+# Q8. What is MaxPooling?
+# Ans:
+# Reduces image dimensions.
+
+# Q9. What is Flatten layer?
+# Ans:
+# Converts 2D matrix into 1D vector.
+
+# Q10. Why softmax is used?
+# Ans:
+# To generate probability for each class.
+
+# Q11. What optimizer is used?
+# Ans:
+# Adam
+
+# Q12. What loss function is used?
+# Ans:
+# Sparse categorical crossentropy
+
+# Q13. What activation function is used?
+# Ans:
+# ReLU and Softmax
+
+# Q14. Why MNIST is popular?
+# Ans:
+# Standard benchmark dataset for image classification.
+
+# Q15. What is TensorFlow?
+# Ans:
+# Open-source machine learning framework.
+
+# ===============================================================
+# SCRIPT TO EXPLAIN TO EXTERNAL EXAMINER
+# ===============================================================
+
+# Good morning sir/ma’am.
+#
+# My experiment is MNIST handwritten digit recognition using
+# TensorFlow and Keras.
+#
+# MNIST dataset contains handwritten digits from 0 to 9.
+#
+# It has 60,000 training images and 10,000 testing images.
+#
+# Each image size is 28x28 pixels.
+#
+# First, I imported required libraries.
+#
+# Then I loaded the MNIST dataset.
+#
+# After that I normalized pixel values between 0 and 1.
+#
+# Then I built a CNN model using:
+# Conv2D
+# MaxPooling
+# Flatten
+# Dense
+# Softmax
+#
+# Conv2D extracts image features.
+#
+# Pooling reduces dimensions.
+#
+# Flatten converts matrix to vector.
+#
+# Dense layer performs classification.
+#
+# Softmax predicts probabilities for digits 0 to 9.
+#
+# Then I compiled model using Adam optimizer.
+#
+# Model was trained for 5 epochs.
+#
+# After training I evaluated test accuracy.
+#
+# Then random image was selected and prediction performed.
+#
+# The model predicted digit correctly with high accuracy.
+#
+# Thank you.
+# ===============================================================

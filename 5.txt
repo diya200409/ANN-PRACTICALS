@@ -1,0 +1,369 @@
+import numpy as np
+
+# Training data
+X = np.array([
+    [1, 1, 1, -1],
+    [-1, -1, 1, 1]
+])
+
+Y = np.array([
+    [1, -1],
+    [-1, 1]
+])
+
+# Weight matrix
+W = np.dot(Y.T, X)
+
+# Sign activation function
+def custom_sign(x):
+    return np.where(x >= 0, 1, -1)
+
+# BAM recall function
+def bam_bidirectional(x_init, max_iters=10):
+    x = x_init.copy()
+
+    for i in range(max_iters):
+        y = custom_sign(np.dot(W, x))       # X → Y
+        x_new = custom_sign(np.dot(W.T, y)) # Y → X
+
+        if np.array_equal(x, x_new):
+            break
+
+        x = x_new
+
+    return x, y
+
+# Test input
+x_test = np.array([1, -1, -1, -1])
+
+# Run BAM
+x_final, y_final = bam_bidirectional(x_test)
+
+# Output
+print("Weight Matrix:")
+print(W)
+
+print("Initial input x:", x_test)
+print("Final recalled x:", x_final)
+print("Recalled y:", y_final)
+
+
+
+
+# ==============================================================
+# EXPERIMENT: Bidirectional Associative Memory (BAM)
+# ==============================================================
+
+# AIM:
+# Write a Python program for Bidirectional Associative Memory
+# with two pairs of vectors.
+
+# OBJECTIVE:
+# To understand the concept of Bidirectional Associative Memory
+# and how associative pattern recall works in neural networks.
+
+
+# ==============================================================
+# THEORY:
+#
+# Bidirectional Associative Memory (BAM) is a type of recurrent
+# neural network introduced by Bart Kosko.
+#
+# It is a hetero-associative memory model, meaning:
+# It associates one pattern with another different pattern.
+#
+# Example:
+# If input X is given, BAM recalls output Y.
+# If output Y is given, BAM recalls input X.
+#
+# Hence the name "Bidirectional".
+#
+# BAM contains two neuron layers:
+# 1. X Layer
+# 2. Y Layer
+#
+# Information flows in both directions:
+# X → Y
+# Y → X
+#
+# BAM stores associations using a weight matrix.
+#
+# Weight Matrix Formula:
+# W = Sum of outer products of training pairs
+#
+# Mathematically:
+# W = Xᵀ × Y
+#
+# BAM works iteratively:
+# Step 1: Input pattern is given
+# Step 2: Forward propagation (X to Y)
+# Step 3: Backward propagation (Y to X)
+# Step 4: Repeat until convergence
+#
+# Activation Function:
+# if value >= 0 → +1
+# else → -1
+#
+# Applications:
+# - Pattern recognition
+# - Memory recall
+# - Error correction
+# - Noise handling
+# ==============================================================
+
+
+# Import NumPy library for matrix operations
+import numpy as np
+
+
+# ==============================================================
+# TRAINING DATA
+# ==============================================================
+
+# Define input training patterns
+# Two patterns, each having 4 elements
+X = np.array([
+    [1, 1, 1, -1],     # Pattern 1
+    [-1, -1, 1, 1]     # Pattern 2
+])
+
+# Define corresponding target patterns
+# Each target has 2 elements
+Y = np.array([
+    [1, -1],           # Target for pattern 1
+    [-1, 1]            # Target for pattern 2
+])
+
+
+# ==============================================================
+# WEIGHT MATRIX CALCULATION
+# ==============================================================
+
+# Create BAM weight matrix using outer product
+#
+# X shape = (2 × 4)
+# Y shape = (2 × 2)
+#
+# Y transpose shape = (2 × 2)
+#
+# Result:
+# Weight matrix W shape = (4 × 2)
+#
+# This stores associations between X and Y
+W = np.dot(Y.T, X)
+
+# Display weight matrix
+print("Weight Matrix:")
+print(W)
+
+
+# ==============================================================
+# SIGN ACTIVATION FUNCTION
+# ==============================================================
+
+# This function converts numerical outputs into bipolar values
+# Positive or zero becomes +1
+# Negative becomes -1
+def custom_sign(x):
+    return np.where(x >= 0, 1, -1)
+
+
+# ==============================================================
+# BAM RECALL FUNCTION
+# ==============================================================
+
+# Function to perform bidirectional recall
+#
+# x_init = test input pattern
+# max_iters = maximum iterations to avoid infinite loop
+def bam_bidirectional(x_init, max_iters=10):
+
+    # Copy input pattern so original remains unchanged
+    x = x_init.copy()
+
+    # Loop for iterative convergence
+    for i in range(max_iters):
+
+        # Forward propagation
+        # X to Y
+        #
+        # Multiply input with weight matrix
+        # Result gives activation values for Y
+        y = custom_sign(np.dot(W, x))
+
+        # Backward propagation
+        # Y to X
+        #
+        # Multiply Y with transpose of weight matrix
+        # Result gives reconstructed X
+        x_new = custom_sign(np.dot(W.T, y))
+
+        # Check convergence
+        #
+        # If reconstructed X equals previous X,
+        # network has stabilized
+        if np.array_equal(x, x_new):
+            break
+
+        # Update X for next iteration
+        x = x_new
+
+    # Return final recalled patterns
+    return x, y
+
+
+# ==============================================================
+# TEST INPUT
+# ==============================================================
+
+# Noisy test pattern
+# Similar to stored pattern but not exact
+x_test = np.array([1, -1, -1, -1])
+
+
+# ==============================================================
+# RUN BAM
+# ==============================================================
+
+# Perform associative recall
+x_final, y_final = bam_bidirectional(x_test)
+
+
+# ==============================================================
+# DISPLAY RESULTS
+# ==============================================================
+
+# Print original input
+print("Initial input x:", x_test)
+
+# Print recalled X
+print("Final recalled x:", x_final)
+
+# Print recalled associated Y
+print("Recalled y:", y_final)
+
+
+# ==============================================================
+# OUTPUT EXPLANATION:
+#
+# Input:
+# [1 -1 -1 -1]
+#
+# This is a noisy or incomplete version.
+#
+# BAM compares input with stored patterns.
+#
+# Forward pass:
+# Input is sent from X layer to Y layer.
+#
+# Y output becomes:
+# [1 -1]
+#
+# Backward pass:
+# Y is sent back to X layer.
+#
+# Reconstructed X becomes:
+# [1 1 1 -1]
+#
+# Since network stabilizes, recall stops.
+#
+# Final output:
+# Initial input x: [ 1 -1 -1 -1]
+# Final recalled x: [ 1  1  1 -1]
+# Recalled y: [ 1 -1]
+#
+# Meaning:
+# BAM successfully recalled the closest stored pattern.
+# ==============================================================
+
+
+# ==============================================================
+# CONCLUSION:
+#
+# We successfully implemented Bidirectional Associative Memory.
+#
+# The BAM network stored two associative pattern pairs and
+# correctly recalled the associated output from noisy input.
+#
+# Thus associative memory retrieval is demonstrated successfully.
+# ==============================================================
+
+
+# ==============================================================
+# VIVA QUESTIONS WITH ANSWERS
+# ==============================================================
+
+# Q1. What is BAM?
+# BAM is Bidirectional Associative Memory, a recurrent neural
+# network used for hetero-associative pattern storage.
+
+# Q2. Why is it called bidirectional?
+# Because data flows in both directions:
+# X to Y and Y to X.
+
+# Q3. What is hetero-associative memory?
+# Memory where input and output patterns are different.
+
+# Q4. What is recurrent neural network?
+# A network where output is fed back into the system.
+
+# Q5. What activation function is used?
+# Bipolar sign activation function.
+
+# Q6. What is convergence?
+# State where outputs stop changing.
+
+# Q7. What is noisy input?
+# Input containing errors or missing values.
+
+# Q8. What is weight matrix?
+# Matrix storing associations between patterns.
+
+# Q9. Who introduced BAM?
+# Bart Kosko.
+
+# Q10. Applications of BAM?
+# Pattern recognition, recall systems, noise correction.
+
+
+# ==============================================================
+# SCRIPT TO EXPLAIN TO EXTERNAL EXAMINER
+# ==============================================================
+
+# "Good morning sir/ma’am.
+#
+# This experiment demonstrates Bidirectional Associative Memory,
+# commonly called BAM.
+#
+# BAM is a recurrent neural network used for associative learning.
+#
+# It is called hetero-associative memory because one input pattern
+# is associated with a different output pattern.
+#
+# In this program, we define two training input patterns and their
+# corresponding target patterns.
+#
+# Using these training pairs, we calculate the BAM weight matrix
+# using outer product summation.
+#
+# We then define a sign activation function which converts positive
+# values into +1 and negative values into -1.
+#
+# Next, we implement the BAM recall mechanism.
+#
+# The test input is first sent from X layer to Y layer.
+# This is forward propagation.
+#
+# Then the recalled Y pattern is sent back from Y layer to X layer.
+# This is backward propagation.
+#
+# This process repeats until convergence, meaning the output no
+# longer changes.
+#
+# Here the noisy input [1 -1 -1 -1] gets corrected to the stored
+# pattern [1 1 1 -1].
+#
+# The associated output recalled is [1 -1].
+#
+# Hence BAM successfully performs associative memory recall."
+# ==============================================================
